@@ -27,7 +27,7 @@ class Idea extends Model
     }
 
     protected $attributes = [
-        'status' => IdeaStatus::PENDING,
+        'status' => IdeaStatus::PENDING->value,
     ];
 
     protected function casts(): array
