@@ -9,7 +9,7 @@
                 <x-form.field name="email" label="Email" type="email"/>
                 <x-form.field name="password" label="Password" type="password"/>
 
-                <button class="btn btn-neutral mt-4">Login</button>
+                <button class="btn btn-neutral mt-4" data-test="login-button">Login</button>
             </fieldset>
         </form>
     </div>
