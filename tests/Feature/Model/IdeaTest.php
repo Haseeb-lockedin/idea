@@ -19,3 +19,21 @@ it('can have steps', function () {
 
     expect($idea->fresh()->steps)->toHaveCount(1);
 });
+
+it('creates a new idea', function () {
+    $this->actingAs($user = User::factory()->create());
+
+    visit('/ideas')
+        ->click('@create-idea-button')
+        ->fill('title', 'do something man')
+        ->click('@button-status-completed')
+        ->fill('description', 'im going to do something big when i grow up')
+        ->click('Create')
+        ->assertPathIs('/ideas');
+
+    expect($user->ideas()->first())->toMatchArray([
+        'title' => 'do something man',
+        'status' => 'completed',
+        'description' => 'im going to do something big when i grow up',
+    ]);
+});

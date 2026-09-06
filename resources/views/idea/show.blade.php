@@ -18,6 +18,14 @@
                     </form>
                 </div>
             </div>
+            <div class="mt-2 space-y-6">
+                @if ($idea->image_path)
+                    <div class="rounded-lg overflow-hidden">
+                        <img src="{{ asset('storage/' . $idea->image_path) }}" alt=""
+                            class="w-full h-auto object-cover">
+                    </div>
+                @endif
+            </div>
             <h1 class="text-2xl font-bold">{{ $idea->title }}</h1>
             <x-card>
                 <div class="card-body">
@@ -31,17 +39,44 @@
                 </div>
             </x-card>
 
-            <div>
-                <h3 class="text-xl font-bold">Links</h3>
-                @foreach ($idea->links as $link)
-                    <div class="flex gap-2 items-center mt-4">
-                        <div class="flex space-y-2 gap-2 bg-neutral border w-full rounded-2xl border-neutral px-4 py-2">
-                            <x-icons.external />
-                            <a target="_blank" class="text-blue-500 hover:underline">{{ $link }}</a>
+            @if ($idea->steps->count())
+                <div>
+                    <h3 class="text-xl font-bold">Steps</h3>
+                    @foreach ($idea->steps as $step)
+                        <div class="flex gap-2 items-center mt-4">
+                            <x-mycard>
+                                <form method="POST" action="{{ route('step.update', $step) }}">
+                                    @csrf
+                                    @method('PATCH')
+                                    <div class="flex items-center gap-x-3">
+                                        <button type="submit" role="checkbox"
+                                            class="size-5 flex items-center justify-center rounded-md border-2 transition-colors {{ $step->completed ? 'border-sky-300 bg-sky-300 text-slate-900' : 'border-slate-400 bg-transparent text-transparent hover:border-sky-300' }}">
+                                            <span aria-hidden="true">&check;</span>
+                                        </button>
+                                        <span
+                                            class="{{ $step->completed ? 'text-slate-400 line-through' : '' }}">{{ $step->description }}</span>
+                                    </div>
+                                </form>
+                            </x-mycard>
                         </div>
-                    </div>
-                @endforeach
-            </div>
+                    @endforeach
+                </div>
+            @endif
+
+            @if ($idea->links->count())
+                <div>
+                    <h3 class="text-xl font-bold">Links</h3>
+                    @foreach ($idea->links as $link)
+                        <div class="flex gap-2 items-center mt-4">
+                            <x-mycard :href="$link"
+                                class="flex gap-x-3 items-center font font-medium text-accent-content">
+                                <x-icons.external />
+                                {{ $link }}
+                            </x-mycard>
+                        </div>
+                    @endforeach
+                </div>
+            @endif
         </div>
     </div>
 </x-layout>
